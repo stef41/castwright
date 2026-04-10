@@ -1,0 +1,14 @@
+[
+  {
+    "instruction": "Write a Python function that takes a list of integers and returns the second largest unique value. If there are fewer than two unique values, raise a ValueError.",
+    "output": "def second_largest(nums: list[int]) -> int:\n    unique = sorted(set(nums), reverse=True)\n    if len(unique) < 2:\n        raise ValueError(\"Need at least two unique values\")\n    return unique[1]"
+  },
+  {
+    "instruction": "Write a Python function that reads a CSV file and returns a dictionary mapping each unique value in the first column to the count of rows with that value.",
+    "output": "import csv\nfrom collections import Counter\n\ndef count_by_first_column(path: str) -> dict[str, int]:\n    with open(path, newline=\"\") as f:\n        reader = csv.reader(f)\n        next(reader)  # skip header\n        return dict(Counter(row[0] for row in reader if row))"
+  },
+  {
+    "instruction": "Write a Python decorator that retries a function up to N times if it raises an exception, with exponential backoff starting at 1 second.",
+    "output": "import time\nfrom functools import wraps\n\ndef retry(max_attempts: int = 3):\n    def decorator(fn):\n        @wraps(fn)\n        def wrapper(*args, **kwargs):\n            for attempt in range(max_attempts):\n                try:\n                    return fn(*args, **kwargs)\n                except Exception:\n                    if attempt == max_attempts - 1:\n                        raise\n                    time.sleep(2 ** attempt)\n        return wrapper\n    return decorator"
+  }
+]

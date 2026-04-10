@@ -1,0 +1,14 @@
+[
+  {
+    "instruction": "What is the difference between a list and a tuple in Python?",
+    "output": "Lists are mutable sequences created with square brackets, while tuples are immutable sequences created with parentheses. Lists support in-place modification (append, remove, sort), whereas tuples cannot be changed after creation. Tuples are hashable (when their elements are) and can be used as dictionary keys, while lists cannot. Tuples also use less memory and are slightly faster for iteration."
+  },
+  {
+    "instruction": "Explain how backpropagation works in neural networks.",
+    "output": "Backpropagation computes gradients of the loss function with respect to each weight by applying the chain rule of calculus. First, a forward pass computes the output and loss. Then, starting from the output layer, the algorithm propagates the error backward through the network. At each layer, it computes the local gradient and multiplies it by the upstream gradient. These gradients are then used by an optimizer (like SGD or Adam) to update the weights in the direction that minimizes the loss."
+  },
+  {
+    "instruction": "What are the ACID properties in database systems?",
+    "output": "ACID stands for Atomicity, Consistency, Isolation, and Durability. Atomicity ensures that a transaction either completes entirely or has no effect. Consistency guarantees that a transaction brings the database from one valid state to another, respecting all constraints. Isolation means concurrent transactions do not interfere with each other, as if they ran sequentially. Durability ensures that once a transaction is committed, its changes persist even after a system crash."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "instruction": "Classify the sentiment of the following review:\n\n\"The battery life on this laptop is incredible — I can work a full 12-hour day without reaching for the charger. The keyboard is comfortable and the display is sharp. My only minor complaint is the fan noise under heavy load, but otherwise this is the best laptop I've owned.\"",
+    "output": "positive"
+  },
+  {
+    "instruction": "Classify the sentiment of the following review:\n\n\"I returned this product after two days. The zipper broke on first use, the stitching was already coming apart, and the material feels nothing like the description. Complete waste of money. Would give zero stars if I could.\"",
+    "output": "negative"
+  },
+  {
+    "instruction": "Classify the sentiment of the following review:\n\n\"The hotel room was clean and the location was convenient, but the Wi-Fi was unreliable and the breakfast options were limited. For the price, it's an acceptable stay for a short business trip, but I wouldn't go out of my way to book it again.\"",
+    "output": "neutral"
+  }
+]
