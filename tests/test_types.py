@@ -12,7 +12,6 @@ from castwright._types import (
     Seed,
 )
 
-
 # --- Seed ---
 
 

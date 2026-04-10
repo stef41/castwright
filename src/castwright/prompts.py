@@ -6,9 +6,8 @@ that are diverse, high-quality, and similar in style to the seed examples.
 
 from __future__ import annotations
 
-import json
 import random
-from typing import List, Sequence
+from collections.abc import Sequence
 
 from castwright._types import Seed
 

@@ -5,7 +5,7 @@ import castwright
 
 class TestPublicAPI:
     def test_version(self):
-        assert castwright.__version__ == "0.1.0"
+        assert castwright.__version__ == "0.3.0"
 
     def test_types_exported(self):
         assert hasattr(castwright, "Seed")

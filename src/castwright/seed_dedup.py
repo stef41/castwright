@@ -8,8 +8,8 @@ No external dependencies required.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Sequence, Tuple
 
 
 @dataclass
@@ -37,8 +37,8 @@ class DedupResult:
     original_count: int
     deduplicated_count: int
     removed_count: int
-    removed_indices: List[int] = field(default_factory=list)
-    similarity_scores: List[float] = field(default_factory=list)
+    removed_indices: list[int] = field(default_factory=list)
+    similarity_scores: list[float] = field(default_factory=list)
 
     @property
     def removal_rate(self) -> float:
@@ -85,15 +85,15 @@ def ngram_similarity(text_a: str, text_b: str, n: int = 3) -> float:
 def exact_dedup(
     examples: Sequence[dict],
     field: str = "instruction",
-) -> Tuple[List[dict], DedupResult]:
+) -> tuple[list[dict], DedupResult]:
     """Remove exact-duplicate examples based on *field*.
 
     Returns (deduplicated_list, result).
     """
     seen: set[str] = set()
-    kept: List[dict] = []
-    removed_indices: List[int] = []
-    scores: List[float] = []
+    kept: list[dict] = []
+    removed_indices: list[int] = []
+    scores: list[float] = []
 
     for idx, ex in enumerate(examples):
         text = ex.get(field, "")
@@ -132,27 +132,27 @@ class SeedDeduplicator:
 
     def __init__(
         self,
-        seed_examples: List[dict],
-        config: Optional[DedupConfig] = None,
+        seed_examples: list[dict],
+        config: DedupConfig | None = None,
     ) -> None:
         self.config = config or DedupConfig()
-        self._seeds: List[dict] = list(seed_examples)
+        self._seeds: list[dict] = list(seed_examples)
 
     # -- public API ---------------------------------------------------------
 
-    def add_seeds(self, examples: List[dict]) -> None:
+    def add_seeds(self, examples: list[dict]) -> None:
         """Add more seed examples to the comparison set."""
         self._seeds.extend(examples)
 
     @property
-    def seeds(self) -> List[dict]:
+    def seeds(self) -> list[dict]:
         return list(self._seeds)
 
     def is_duplicate(
         self,
         example: dict,
         field: str = "instruction",
-    ) -> Tuple[bool, float]:
+    ) -> tuple[bool, float]:
         """Check whether *example* is too similar to any seed.
 
         Returns ``(is_dup, max_similarity)``.
@@ -173,16 +173,16 @@ class SeedDeduplicator:
 
     def deduplicate(
         self,
-        examples: List[dict],
+        examples: list[dict],
         field: str = "instruction",
-    ) -> Tuple[List[dict], DedupResult]:
+    ) -> tuple[list[dict], DedupResult]:
         """Remove examples that are too similar to any seed.
 
         Returns ``(kept, result)``.
         """
-        kept: List[dict] = []
-        removed_indices: List[int] = []
-        scores: List[float] = []
+        kept: list[dict] = []
+        removed_indices: list[int] = []
+        scores: list[float] = []
 
         for idx, ex in enumerate(examples):
             is_dup, sim = self.is_duplicate(ex, field=field)
@@ -202,15 +202,15 @@ class SeedDeduplicator:
 
     def find_near_duplicates(
         self,
-        examples: List[dict],
+        examples: list[dict],
         field: str = "instruction",
-    ) -> List[Tuple[int, int, float]]:
+    ) -> list[tuple[int, int, float]]:
         """Find near-duplicate pairs *within* *examples*.
 
         Returns list of ``(i, j, similarity)`` tuples whose similarity
         meets or exceeds the threshold.
         """
-        pairs: List[Tuple[int, int, float]] = []
+        pairs: list[tuple[int, int, float]] = []
         n = len(examples)
         for i in range(n):
             text_i = self._normalise(examples[i].get(field, ""))

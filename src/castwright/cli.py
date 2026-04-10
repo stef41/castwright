@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
-from typing import Optional
 
 try:
     import click
@@ -57,8 +55,8 @@ def _build_cli():  # type: ignore[no-untyped-def]
         temperature: float,
         fmt: str,
         provider: str,
-        api_key: Optional[str],
-        base_url: Optional[str],
+        api_key: str | None,
+        base_url: str | None,
         diversity: float,
     ) -> None:
         """Generate synthetic data from seed examples."""

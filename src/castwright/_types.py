@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
 
 class OutputFormat(str, Enum):
@@ -26,10 +26,10 @@ class Seed:
     output: str
     input: str = ""
     system: str = ""
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, str]:
-        d: Dict[str, str] = {
+    def to_dict(self) -> dict[str, str]:
+        d: dict[str, str] = {
             "instruction": self.instruction,
             "output": self.output,
         }
@@ -46,19 +46,19 @@ class GeneratedExample:
     output: str
     input: str = ""
     system: str = ""
-    seed_index: Optional[int] = None
-    quality_score: Optional[float] = None
-    generation_model: Optional[str] = None
+    seed_index: int | None = None
+    quality_score: float | None = None
+    generation_model: str | None = None
 
-    def to_alpaca(self) -> Dict[str, str]:
-        d: Dict[str, str] = {"instruction": self.instruction, "output": self.output}
+    def to_alpaca(self) -> dict[str, str]:
+        d: dict[str, str] = {"instruction": self.instruction, "output": self.output}
         if self.input:
             d["input"] = self.input
         if self.system:
             d["system"] = self.system
         return d
 
-    def to_sharegpt(self) -> Dict[str, Any]:
+    def to_sharegpt(self) -> dict[str, Any]:
         conversations: list[dict[str, str]] = []
         if self.system:
             conversations.append({"from": "system", "value": self.system})
@@ -66,7 +66,7 @@ class GeneratedExample:
         conversations.append({"from": "gpt", "value": self.output})
         return {"conversations": conversations}
 
-    def to_openai(self) -> Dict[str, Any]:
+    def to_openai(self) -> dict[str, Any]:
         messages: list[dict[str, str]] = []
         if self.system:
             messages.append({"role": "system", "content": self.system})
@@ -74,7 +74,7 @@ class GeneratedExample:
         messages.append({"role": "assistant", "content": self.output})
         return {"messages": messages}
 
-    def to_dict(self, fmt: OutputFormat = OutputFormat.ALPACA) -> Dict[str, Any]:
+    def to_dict(self, fmt: OutputFormat = OutputFormat.ALPACA) -> dict[str, Any]:
         if fmt == OutputFormat.SHAREGPT:
             return self.to_sharegpt()
         if fmt == OutputFormat.OPENAI:
@@ -108,7 +108,7 @@ class GenerationConfig:
 class GenerationResult:
     """Result of a generation run."""
 
-    examples: List[GeneratedExample]
+    examples: list[GeneratedExample]
     n_generated: int
     n_filtered: int
     model: str

@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import re
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 from urllib.request import Request, urlopen
 
 from castwright._types import ProviderError
@@ -25,7 +25,7 @@ class LLMProvider(ABC):
         system: str = "",
         temperature: float = 0.9,
         max_tokens: int = 4096,
-    ) -> Tuple[str, int, int]:
+    ) -> tuple[str, int, int]:
         """Generate a completion.
 
         Returns (text, input_tokens, output_tokens).
@@ -33,7 +33,7 @@ class LLMProvider(ABC):
         ...
 
     @staticmethod
-    def parse_json_array(text: str) -> List[Dict[str, Any]]:
+    def parse_json_array(text: str) -> list[dict[str, Any]]:
         """Extract a JSON array from the LLM response.
 
         Handles common issues: markdown code blocks, trailing commas, etc.
@@ -79,8 +79,8 @@ class OpenAIProvider(LLMProvider):
     def __init__(
         self,
         model: str = "gpt-4o-mini",
-        api_key: Optional[str] = None,
-        base_url: Optional[str] = None,
+        api_key: str | None = None,
+        base_url: str | None = None,
     ) -> None:
         try:
             import openai
@@ -90,7 +90,7 @@ class OpenAIProvider(LLMProvider):
                 "Install with: pip install castwright[openai]"
             ) from None
 
-        kwargs: Dict[str, Any] = {}
+        kwargs: dict[str, Any] = {}
         if api_key:
             kwargs["api_key"] = api_key
         if base_url:
@@ -105,7 +105,7 @@ class OpenAIProvider(LLMProvider):
         system: str = "",
         temperature: float = 0.9,
         max_tokens: int = 4096,
-    ) -> Tuple[str, int, int]:
+    ) -> tuple[str, int, int]:
         messages: list[dict[str, str]] = []
         if system:
             messages.append({"role": "system", "content": system})
@@ -135,7 +135,7 @@ class AnthropicProvider(LLMProvider):
     def __init__(
         self,
         model: str = "claude-sonnet-4-20250514",
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
     ) -> None:
         try:
             import anthropic
@@ -145,7 +145,7 @@ class AnthropicProvider(LLMProvider):
                 "Install with: pip install castwright[anthropic]"
             ) from None
 
-        kwargs: Dict[str, Any] = {}
+        kwargs: dict[str, Any] = {}
         if api_key:
             kwargs["api_key"] = api_key
 
@@ -158,8 +158,8 @@ class AnthropicProvider(LLMProvider):
         system: str = "",
         temperature: float = 0.9,
         max_tokens: int = 4096,
-    ) -> Tuple[str, int, int]:
-        kwargs: Dict[str, Any] = {
+    ) -> tuple[str, int, int]:
+        kwargs: dict[str, Any] = {
             "model": self._model,
             "max_tokens": max_tokens,
             "temperature": temperature,
@@ -190,8 +190,8 @@ class OllamaProvider(LLMProvider):
     def __init__(
         self,
         model: str = "llama3",
-        host: Optional[str] = None,
-        base_url: Optional[str] = None,
+        host: str | None = None,
+        base_url: str | None = None,
     ) -> None:
         if base_url:
             self._base_url = base_url.rstrip("/")
@@ -207,7 +207,7 @@ class OllamaProvider(LLMProvider):
         system: str = "",
         temperature: float = 0.9,
         max_tokens: int = 4096,
-    ) -> Tuple[str, int, int]:
+    ) -> tuple[str, int, int]:
         messages: list[dict[str, str]] = []
         if system:
             messages.append({"role": "system", "content": system})
@@ -246,7 +246,7 @@ class MockProvider(LLMProvider):
     Generates deterministic fake data based on seed examples.
     """
 
-    def __init__(self, responses: Optional[List[str]] = None) -> None:
+    def __init__(self, responses: list[str] | None = None) -> None:
         self._responses = responses or []
         self._call_count = 0
 
@@ -256,7 +256,7 @@ class MockProvider(LLMProvider):
         system: str = "",
         temperature: float = 0.9,
         max_tokens: int = 4096,
-    ) -> Tuple[str, int, int]:
+    ) -> tuple[str, int, int]:
         if self._responses:
             idx = self._call_count % len(self._responses)
             self._call_count += 1

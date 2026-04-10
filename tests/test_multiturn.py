@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Tuple
-from unittest.mock import patch
 
 import pytest
 
@@ -18,7 +16,6 @@ from castwright.multiturn import (
 )
 from castwright.providers import LLMProvider
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -26,7 +23,7 @@ from castwright.providers import LLMProvider
 class _FakeProvider(LLMProvider):
     """Provider that returns a canned JSON array of turns."""
 
-    def __init__(self, turns: List[Dict[str, str]]) -> None:
+    def __init__(self, turns: list[dict[str, str]]) -> None:
         self._turns = turns
 
     def generate(
@@ -35,11 +32,11 @@ class _FakeProvider(LLMProvider):
         system: str = "",
         temperature: float = 0.9,
         max_tokens: int = 4096,
-    ) -> Tuple[str, int, int]:
+    ) -> tuple[str, int, int]:
         return json.dumps(self._turns), 10, 20
 
 
-def _make_conversation(*pairs: Tuple[str, str]) -> Conversation:
+def _make_conversation(*pairs: tuple[str, str]) -> Conversation:
     """Helper: create a Conversation from (role, content) pairs."""
     return Conversation(
         turns=[ConversationTurn(role=r, content=c) for r, c in pairs],

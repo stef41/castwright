@@ -3,14 +3,14 @@
 from castwright._types import GeneratedExample
 from castwright.filters import (
     DEFAULT_FILTERS,
-    deduplicate_generated,
-    filter_examples,
     _check_balanced_formatting,
     _check_min_length,
     _check_no_meta_talk,
     _check_not_empty,
     _check_not_refusal,
     _check_not_repetitive,
+    deduplicate_generated,
+    filter_examples,
 )
 
 

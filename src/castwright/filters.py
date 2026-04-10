@@ -7,7 +7,8 @@ All checks are CPU-only and deterministic.
 from __future__ import annotations
 
 import re
-from typing import Callable, List, Optional, Sequence
+from collections.abc import Sequence
+from typing import Callable
 
 from castwright._types import GeneratedExample
 
@@ -57,18 +58,13 @@ def _check_no_meta_talk(ex: GeneratedExample) -> bool:
         r"here are \d+ (more )?examples",
     ]
     full_text = f"{ex.instruction} {ex.output}".lower()
-    for pattern in meta_patterns:
-        if re.search(pattern, full_text, re.IGNORECASE):
-            return False
-    return True
+    return all(not re.search(pattern, full_text, re.IGNORECASE) for pattern in meta_patterns)
 
 
 def _check_balanced_formatting(ex: GeneratedExample) -> bool:
     """Check for balanced code blocks and quotes."""
     text = ex.output
-    if text.count("```") % 2 != 0:
-        return False
-    return True
+    return text.count("```") % 2 == 0
 
 
 # Default filter chain
@@ -84,8 +80,8 @@ DEFAULT_FILTERS: list[Callable[[GeneratedExample], bool]] = [
 
 def filter_examples(
     examples: Sequence[GeneratedExample],
-    filters: Optional[List[Callable[[GeneratedExample], bool]]] = None,
-) -> List[GeneratedExample]:
+    filters: list[Callable[[GeneratedExample], bool]] | None = None,
+) -> list[GeneratedExample]:
     """Apply quality filters to generated examples.
 
     Parameters
@@ -113,8 +109,8 @@ def filter_examples(
 
 def deduplicate_generated(
     examples: Sequence[GeneratedExample],
-    existing_instructions: Optional[set[str]] = None,
-) -> List[GeneratedExample]:
+    existing_instructions: set[str] | None = None,
+) -> list[GeneratedExample]:
     """Remove duplicates from generated examples.
 
     Also removes examples whose instruction matches anything in

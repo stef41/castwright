@@ -6,11 +6,10 @@ fast CPU-only heuristics (no external dependencies).
 
 from __future__ import annotations
 
-import math
 import re
 import string
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Sequence
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -40,7 +39,7 @@ class QualityRubric:
 
     def __init__(
         self,
-        dimensions: Optional[List[QualityDimension]] = None,
+        dimensions: list[QualityDimension] | None = None,
     ) -> None:
         if dimensions is not None:
             self.dimensions = list(dimensions)
@@ -52,7 +51,7 @@ class QualityRubric:
                 QualityDimension("completeness", 0.20, "Presence of expected fields and sufficient detail"),
                 QualityDimension("format_compliance", 0.15, "Proper formatting (balanced delimiters, etc.)"),
             ]
-        self._scorers: Dict[str, Any] = {
+        self._scorers: dict[str, Any] = {
             "coherence": _score_coherence,
             "relevance": _score_relevance,
             "diversity": _score_diversity,
@@ -71,9 +70,9 @@ class QualityRubric:
         self.dimensions.append(QualityDimension(name, weight, description))
 
     # ------------------------------------------------------------------
-    def score_example(self, example: dict) -> List[ScoreResult]:
+    def score_example(self, example: dict) -> list[ScoreResult]:
         """Score a single example against every dimension."""
-        results: List[ScoreResult] = []
+        results: list[ScoreResult] = []
         for dim in self.dimensions:
             scorer = self._scorers.get(dim.name, _score_generic)
             score, detail = scorer(example)
@@ -81,7 +80,7 @@ class QualityRubric:
         return results
 
     # ------------------------------------------------------------------
-    def score_dataset(self, examples: List[dict]) -> Dict[str, Dict[str, float]]:
+    def score_dataset(self, examples: list[dict]) -> dict[str, dict[str, float]]:
         """Aggregate per-dimension scores across a dataset.
 
         Returns ``{dimension: {"mean": …, "min": …, "max": …}}``.
@@ -89,12 +88,12 @@ class QualityRubric:
         if not examples:
             return {}
 
-        accum: Dict[str, List[float]] = {d.name: [] for d in self.dimensions}
+        accum: dict[str, list[float]] = {d.name: [] for d in self.dimensions}
         for ex in examples:
             for sr in self.score_example(ex):
                 accum[sr.dimension].append(sr.score)
 
-        result: Dict[str, Dict[str, float]] = {}
+        result: dict[str, dict[str, float]] = {}
         for dim_name, scores in accum.items():
             result[dim_name] = {
                 "mean": sum(scores) / len(scores),
@@ -128,7 +127,7 @@ def default_rubric() -> QualityRubric:
 # Report formatting
 # ======================================================================
 
-def format_rubric_report(scores: Dict[str, Dict[str, float]]) -> str:
+def format_rubric_report(scores: dict[str, dict[str, float]]) -> str:
     """Format dataset-level scores into a human-readable text report."""
     if not scores:
         return "No scores to report."
@@ -307,11 +306,5 @@ def _score_generic(example: dict) -> tuple[float, str]:
 
 # Minimal English stopwords for relevance overlap
 _STOPWORDS = frozenset(
-    "a an the is are was were be been being have has had do does did will would "
-    "shall should may might can could to of in for on with at by from as into "
-    "through during before after above below between out off over under again "
-    "further then once here there when where why how all each every both few "
-    "more most other some such no nor not only own same so than too very and "
-    "but or if it its i me my we our you your he him his she her they them their "
-    "this that these those what which who whom".split()
+    ["a", "an", "the", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "do", "does", "did", "will", "would", "shall", "should", "may", "might", "can", "could", "to", "of", "in", "for", "on", "with", "at", "by", "from", "as", "into", "through", "during", "before", "after", "above", "below", "between", "out", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "each", "every", "both", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "and", "but", "or", "if", "it", "its", "i", "me", "my", "we", "our", "you", "your", "he", "him", "his", "she", "her", "they", "them", "their", "this", "that", "these", "those", "what", "which", "who", "whom"]
 )

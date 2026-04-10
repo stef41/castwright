@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from castwright.providers import LLMProvider
@@ -21,8 +21,8 @@ class ConversationTurn:
 class Conversation:
     """A multi-turn conversation."""
 
-    turns: List[ConversationTurn] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    turns: list[ConversationTurn] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
     def num_turns(self) -> int:
@@ -72,7 +72,7 @@ def _build_extend_prompt(
     )
 
 
-def _parse_turns(raw_items: List[Dict[str, Any]]) -> List[ConversationTurn]:
+def _parse_turns(raw_items: list[dict[str, Any]]) -> list[ConversationTurn]:
     """Parse raw JSON items into ConversationTurn objects."""
     turns: list[ConversationTurn] = []
     for item in raw_items:
@@ -88,7 +88,7 @@ def _parse_turns(raw_items: List[Dict[str, Any]]) -> List[ConversationTurn]:
 def generate_conversation(
     seed_topic: str,
     num_turns: int = 4,
-    provider: Optional[LLMProvider] = None,
+    provider: LLMProvider | None = None,
 ) -> Conversation:
     """Generate a multi-turn conversation from a topic.
 
@@ -139,7 +139,7 @@ def generate_conversation(
 def extend_conversation(
     conversation: Conversation,
     num_turns: int = 2,
-    provider: Optional[LLMProvider] = None,
+    provider: LLMProvider | None = None,
 ) -> Conversation:
     """Add more turns to an existing conversation.
 
@@ -185,7 +185,7 @@ def extend_conversation(
     )
 
 
-def format_sharegpt(conversation: Conversation) -> Dict[str, Any]:
+def format_sharegpt(conversation: Conversation) -> dict[str, Any]:
     """Convert a conversation to ShareGPT format.
 
     Returns a dict with a ``"conversations"`` key mapping roles to
@@ -199,7 +199,7 @@ def format_sharegpt(conversation: Conversation) -> Dict[str, Any]:
     return {"conversations": convs}
 
 
-def format_openai(conversation: Conversation) -> List[Dict[str, str]]:
+def format_openai(conversation: Conversation) -> list[dict[str, str]]:
     """Convert a conversation to OpenAI chat format.
 
     Returns a list of ``{"role": ..., "content": ...}`` dicts.

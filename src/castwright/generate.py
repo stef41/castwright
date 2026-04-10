@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import json
 import math
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, Union
+from typing import Any
 
 from castwright._types import (
     CastwrightError,
@@ -18,14 +19,14 @@ from castwright._types import (
 )
 from castwright.filters import deduplicate_generated, filter_examples
 from castwright.prompts import build_generation_prompt, build_multiturn_prompt
-from castwright.providers import LLMProvider, MockProvider
+from castwright.providers import LLMProvider
 
 
 def _parse_generated(
-    raw_items: List[Dict[str, Any]],
-    seed_index: Optional[int],
+    raw_items: list[dict[str, Any]],
+    seed_index: int | None,
     model: str,
-) -> List[GeneratedExample]:
+) -> list[GeneratedExample]:
     """Parse raw JSON items into GeneratedExample objects."""
     examples: list[GeneratedExample] = []
     for item in raw_items:
@@ -64,7 +65,7 @@ def _parse_generated(
 def generate(
     seeds: Sequence[Seed],
     provider: LLMProvider,
-    config: Optional[GenerationConfig] = None,
+    config: GenerationConfig | None = None,
 ) -> GenerationResult:
     """Generate synthetic instruction-tuning data from seed examples.
 
@@ -108,7 +109,7 @@ def generate(
         "well-formatted examples."
     )
 
-    for batch_idx in range(n_batches):
+    for _batch_idx in range(n_batches):
         remaining = config.n - len(all_generated)
         if remaining <= 0:
             break
@@ -232,7 +233,7 @@ def generate_multiturn(
 
 def save_results(
     result: GenerationResult,
-    path: Union[str, Path],
+    path: str | Path,
     fmt: OutputFormat = OutputFormat.ALPACA,
 ) -> None:
     """Save generated examples to a JSONL file."""
@@ -244,7 +245,7 @@ def save_results(
             f.write(json.dumps(ex.to_dict(fmt), ensure_ascii=False) + "\n")
 
 
-def load_seeds(path: Union[str, Path]) -> List[Seed]:
+def load_seeds(path: str | Path) -> list[Seed]:
     """Load seed examples from a JSONL or JSON file."""
     path = Path(path)
     if not path.exists():

@@ -8,7 +8,6 @@ from castwright.prompts import (
     format_seed_examples,
 )
 
-
 SEEDS = [
     Seed(instruction="Explain recursion", output="Recursion is when a function calls itself."),
     Seed(instruction="What is a hash table?", output="A data structure mapping keys to values."),

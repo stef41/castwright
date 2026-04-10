@@ -1,8 +1,6 @@
 """Tests for castwright.generate."""
 
 import json
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -22,7 +20,6 @@ from castwright.generate import (
     save_results,
 )
 from castwright.providers import MockProvider
-
 
 SEEDS = [
     Seed(instruction="Explain recursion in programming", output="Recursion is a technique where a function calls itself to solve smaller subproblems."),

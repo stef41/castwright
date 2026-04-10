@@ -1,6 +1,5 @@
 """Tests for castwright.cli."""
 
-import json
 
 import pytest
 
