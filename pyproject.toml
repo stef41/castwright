@@ -45,9 +45,9 @@ all = ["castwright[openai,anthropic,cli]"]
 castwright = "castwright.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/zbhatti/castwright"
-Repository = "https://github.com/zbhatti/castwright"
-Issues = "https://github.com/zbhatti/castwright/issues"
+Homepage = "https://github.com/stef41/castwright"
+Repository = "https://github.com/stef41/castwright"
+Issues = "https://github.com/stef41/castwright/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/castwright"]

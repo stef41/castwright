@@ -1,8 +1,16 @@
 # castwright
 
+[![CI](https://github.com/stef41/castwright/actions/workflows/ci.yml/badge.svg)](https://github.com/stef41/castwright/actions/workflows/ci.yml)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
+
 **Generate synthetic instruction-tuning data that doesn't look synthetic.**
 
 castwright takes a handful of seed examples and produces thousands of new instruction-output pairs using any LLM API. It handles the annoying parts — prompt engineering, JSON parsing, deduplication, quality filtering — so you can focus on the model you're actually training.
+
+<p align="center">
+  <img src="assets/generation_report.svg" width="720" alt="castwright generation report" />
+</p>
 
 ```python
 from castwright import generate, load_seeds, save_results, GenerationConfig
