@@ -19,6 +19,14 @@ from castwright.generate import (
     load_seeds,
     save_results,
 )
+from castwright.multiturn import (
+    Conversation,
+    ConversationTurn,
+    extend_conversation,
+    format_openai,
+    format_sharegpt,
+    generate_conversation,
+)
 from castwright.providers import (
     AnthropicProvider,
     LLMProvider,
@@ -44,6 +52,13 @@ __all__ = [
     "generate_multiturn",
     "load_seeds",
     "save_results",
+    # Multi-turn
+    "ConversationTurn",
+    "Conversation",
+    "generate_conversation",
+    "extend_conversation",
+    "format_sharegpt",
+    "format_openai",
     # Providers
     "LLMProvider",
     "OpenAIProvider",
