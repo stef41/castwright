@@ -34,6 +34,21 @@ from castwright.providers import (
     OllamaProvider,
     OpenAIProvider,
 )
+from castwright.scoring import (
+    QualityDimension,
+    QualityRubric,
+    ScoreResult,
+    default_rubric,
+    format_rubric_report,
+)
+from castwright.seed_dedup import (
+    DedupConfig,
+    DedupResult,
+    SeedDeduplicator,
+    exact_dedup,
+    format_dedup_report,
+    ngram_similarity,
+)
 
 __version__ = "0.2.0"
 
@@ -68,4 +83,17 @@ __all__ = [
     # Filters
     "filter_examples",
     "deduplicate_generated",
+    # Scoring
+    "QualityDimension",
+    "QualityRubric",
+    "ScoreResult",
+    "default_rubric",
+    "format_rubric_report",
+    # Seed dedup
+    "DedupConfig",
+    "DedupResult",
+    "SeedDeduplicator",
+    "exact_dedup",
+    "format_dedup_report",
+    "ngram_similarity",
 ]
