@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "castwright"
+version = "0.1.0"
+description = "Generate high-quality synthetic instruction-tuning data from seed examples. Simple API, built-in quality filtering, cost-aware."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.9"
+authors = [{ name = "Zacharie Bhatti" }]
+keywords = [
+    "llm",
+    "synthetic-data",
+    "instruction-tuning",
+    "fine-tuning",
+    "data-generation",
+    "sft",
+    "training-data",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+openai = ["openai>=1.0"]
+anthropic = ["anthropic>=0.20"]
+cli = ["click>=8.0", "rich>=13.0"]
+all = ["castwright[openai,anthropic,cli]"]
+
+[project.scripts]
+castwright = "castwright.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/zbhatti/castwright"
+Repository = "https://github.com/zbhatti/castwright"
+Issues = "https://github.com/zbhatti/castwright/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/castwright"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 99
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.9"
+strict = true
