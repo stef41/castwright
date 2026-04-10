@@ -23,6 +23,7 @@ from castwright.providers import (
     AnthropicProvider,
     LLMProvider,
     MockProvider,
+    OllamaProvider,
     OpenAIProvider,
 )
 
@@ -47,6 +48,7 @@ __all__ = [
     "LLMProvider",
     "OpenAIProvider",
     "AnthropicProvider",
+    "OllamaProvider",
     "MockProvider",
     # Filters
     "filter_examples",

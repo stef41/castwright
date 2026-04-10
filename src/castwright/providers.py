@@ -10,6 +10,7 @@ import json
 import re
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple
+from urllib.request import Request, urlopen
 
 from castwright._types import ProviderError
 
@@ -175,6 +176,66 @@ class AnthropicProvider(LLMProvider):
         text = response.content[0].text if response.content else ""
         input_tokens = response.usage.input_tokens
         output_tokens = response.usage.output_tokens
+
+        return text, input_tokens, output_tokens
+
+
+class OllamaProvider(LLMProvider):
+    """Ollama local LLM provider (uses its OpenAI-compatible API).
+
+    Connects to Ollama at ``http://localhost:11434`` by default.
+    No extra dependencies required — uses only ``urllib``.
+    """
+
+    def __init__(
+        self,
+        model: str = "llama3",
+        host: Optional[str] = None,
+        base_url: Optional[str] = None,
+    ) -> None:
+        if base_url:
+            self._base_url = base_url.rstrip("/")
+        elif host:
+            self._base_url = host.rstrip("/") + "/v1"
+        else:
+            self._base_url = "http://localhost:11434/v1"
+        self._model = model
+
+    def generate(
+        self,
+        prompt: str,
+        system: str = "",
+        temperature: float = 0.9,
+        max_tokens: int = 4096,
+    ) -> Tuple[str, int, int]:
+        messages: list[dict[str, str]] = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+
+        payload = json.dumps({
+            "model": self._model,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }).encode()
+
+        req = Request(
+            f"{self._base_url}/chat/completions",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+        )
+
+        try:
+            with urlopen(req) as resp:
+                data = json.loads(resp.read())
+        except Exception as e:
+            raise ProviderError(f"Ollama API error: {e}") from e
+
+        text = data["choices"][0]["message"]["content"] if data.get("choices") else ""
+        usage = data.get("usage", {})
+        input_tokens = usage.get("prompt_tokens", 0)
+        output_tokens = usage.get("completion_tokens", 0)
 
         return text, input_tokens, output_tokens
 
