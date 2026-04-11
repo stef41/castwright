@@ -1,5 +1,7 @@
 # castwright
 
+[![PyPI](https://img.shields.io/pypi/v/castwright?color=blue)](https://pypi.org/project/castwright/)
+[![Downloads](https://img.shields.io/pypi/dm/castwright)](https://pypi.org/project/castwright/)
 [![CI](https://github.com/stef41/castwright/actions/workflows/ci.yml/badge.svg)](https://github.com/stef41/castwright/actions/workflows/ci.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
